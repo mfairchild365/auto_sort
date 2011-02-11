@@ -15,14 +15,13 @@ media server to sort massive amounts of videos.
 //Create an array of the alphabet.
 $alpha = range('a', 'z');
 
-echo "--Starting Auto Sort---" . PHP_EOL;
+$log = date("F j, Y, g:i a") . "\n";
 
 foreach ($alpha as $lowercase) {
     //create a lowercase folder if it does not already exist.
     if (!is_dir($lowercase)) {
         mkdir($lowercase);
     }
-    echo $lowercase.PHP_EOL;
 }
 
 $dir = new DirectoryIterator(dirname(__FILE__));
@@ -42,17 +41,23 @@ foreach ($dir as $file) {
     }
     
     //Don't move this file
-    if ($file == 'autosort.php') {
+    if ($file == 'autosort.php' |
+        $file == 'autosort.log' ) {
         continue;
     }
     
     //Move it
-    echo "Moving $file ...";
+    $log .= " Moving $file ...\n";
     
     if (!rename($file, $letter.'/'.$file)) {
-        echo "failed to copy $file...\n";
+       $log .= " failed to copy $file...\n";
     }
 }
 
-echo "--Auto Sort End--------" . PHP_EOL;
-echo PHP_EOL;
+//Log
+$log .= "\n";
+touch(getcwd()."/autosort.log");
+$file = new SplFileObject("autosort.log", "a");
+$written = $file->fwrite($log);
+
+echo "done!\n";
