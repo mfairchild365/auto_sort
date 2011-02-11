@@ -13,19 +13,16 @@ media server to sort massive amounts of videos.
 */
 
 //Create an array of the alphabet.
-$alpha = array();
-for ($i=65; $i<=90; $i++) {
-    $alpha[chr($i+32)] = chr($i);
-}
+$alpha = range('a', 'z');
 
 echo "--Starting Auto Sort---" . PHP_EOL;
-
-foreach ($alpha as $lowercase => $uppercase) {
+var_dump($alpha);
+foreach ($alpha as $lowercase) {
     //create a lowercase folder if it does not already exist.
     if (!is_dir($lowercase)) {
         mkdir($lowercase);
     }
-    echo $lowercase.$uppercase.PHP_EOL;
+    echo $lowercase.PHP_EOL;
 }
 
 
@@ -38,7 +35,7 @@ if ($handle = opendir('.')) {
         //Get the first letter of the file and convert it to lowercase.
         $letter = strtolower($file[0]);
         
-        if (!isset($alpha[$letter])) {
+        if (!in_array($letter, $alpha)) {
             continue;
         }
         
