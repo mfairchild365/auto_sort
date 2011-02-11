@@ -16,7 +16,7 @@ media server to sort massive amounts of videos.
 $alpha = range('a', 'z');
 
 echo "--Starting Auto Sort---" . PHP_EOL;
-var_dump($alpha);
+
 foreach ($alpha as $lowercase) {
     //create a lowercase folder if it does not already exist.
     if (!is_dir($lowercase)) {
@@ -54,10 +54,8 @@ if ($handle = opendir('.')) {
         
         if (!rename($file, $letter.'/'.$file)) {
             echo "failed to copy $file...\n";
-            continue;
         }
         
-        echo "Success!" . PHP_EOL;
     }
     closedir($handle);
 }
