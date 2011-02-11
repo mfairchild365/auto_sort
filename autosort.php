@@ -25,39 +25,33 @@ foreach ($alpha as $lowercase) {
     echo $lowercase.PHP_EOL;
 }
 
-
-if ($handle = opendir('.')) {
-    echo "Directory handle: $handle\n";
-    echo "Files:\n";
-
-    while (false !== ($file = readdir($handle))) {
-        
-        //Get the first letter of the file and convert it to lowercase.
-        $letter = strtolower($file[0]);
-        
-        if (!in_array($letter, $alpha)) {
-            continue;
-        }
-        
-        //if the letter is a file, don't me it.  Its an alpha folder.
-        if ($letter == $file) {
-            continue;
-        }
-        
-        //Don't move this file
-        if ($file == 'autosort.php') {
-            continue;
-        }
-        
-        //Move it
-        echo "Moving $file ...";
-        
-        if (!rename($file, $letter.'/'.$file)) {
-            echo "failed to copy $file...\n";
-        }
-        
+$dir = new DirectoryIterator(dirname(__FILE__));
+foreach ($dir as $file) {
+    $file = $file->getFilename();
+    
+    //Get the first letter of the file and convert it to lowercase.
+    $letter = strtolower($file[0]);
+    
+    if (!in_array($letter, $alpha)) {
+        continue;
     }
-    closedir($handle);
+    
+    //if the letter is a file, don't me it.  Its an alpha folder.
+    if ($letter == $file) {
+        continue;
+    }
+    
+    //Don't move this file
+    if ($file == 'autosort.php') {
+        continue;
+    }
+    
+    //Move it
+    echo "Moving $file ...";
+    
+    if (!rename($file, $letter.'/'.$file)) {
+        echo "failed to copy $file...\n";
+    }
 }
 
 echo "--Auto Sort End--------" . PHP_EOL;
